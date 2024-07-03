@@ -1,17 +1,26 @@
-const { fetchAllProducts, fetchProductById } = require("../models/Product")
+const { fetchAllProducts, fetchProductById } = require("../models/Product");
+
+const CustomError = require("../utils/CustomError");
+const asyncErrorHandler = require('../utils/asyncErrorHandler');
+
 
 //  @route /products
 //  @method GET
-const index = async (req, res) => {
+const index = asyncErrorHandler(async (req, res, next) => {
     const products = await fetchAllProducts();
-    return res.status(200).json({ error: null, data: products });
-}
+    return res.status(200).json({ status: 'success', data: products });
+})
 
 //  @route /products/:id
 //  @method GET
-const show = async (req, res) => {
+const show = asyncErrorHandler(async (req, res, next) => {
     const productId = req.params.id;
-    const [product] = await fetchProductById(productId);
+    const product = await fetchProductById(productId);
+
+    if (!product) {
+        const error = new CustomError('Product with that ID is not found', 404);
+        return next(error);
+    }
 
     const flavors = product.flavors;
 
@@ -22,8 +31,9 @@ const show = async (req, res) => {
         }
     }
 
-    return res.status(200).json({ error: null, data: product });
-}
+    return res.status(200).json({ status: 'success', data: product });
+})
+
 
 module.exports = {
     index,

@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+const globalErrorHandler = require('./controllers/ErrorController');
+
 const ProductRoutes = require('./routes/ProductRoutes');
 const UserRoutes = require('./routes/UserRoutes');
 const OrderRoutes = require('./routes/OrderRoutes');
@@ -29,5 +31,13 @@ app.use(ProductRoutes);
 app.use(UserRoutes);
 app.use(OrderRoutes);
 
+app.all('*', (req, res, next) => {
+    res.status(404).json({
+        status: 'fail', 
+        message: "error"
+    })
+})
+
+app.use(globalErrorHandler);
 
 module.exports = app;

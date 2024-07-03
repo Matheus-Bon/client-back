@@ -32,7 +32,9 @@ const credentialsSchema = new Schema({
 
 const schema = new Schema(
     {
-        name: { type: String },
+        name: { 
+            type: String 
+        },
         phone: { type: String, maxLength: 13, index: { unique: true } },
         current_order_id: { type: mongoose.Types.ObjectId, ref: 'orders' },
         role: { type: String, enum: ['admin', 'clerk', 'user', 'deliveryMan'] },
