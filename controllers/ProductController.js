@@ -15,23 +15,15 @@ const index = asyncErrorHandler(async (req, res, next) => {
 //  @method GET
 const show = asyncErrorHandler(async (req, res, next) => {
     const productId = req.params.id;
+
     const product = await fetchProductById(productId);
 
-    if (!product) {
+    if (!product.length) {
         const error = new CustomError('Product with that ID is not found', 404);
         return next(error);
     }
-
-    const flavors = product.flavors;
-
-    if (flavors.length == 1) {
-        const items = Object.keys(flavors[0]);
-        if (!items.length) {
-            product.flavors.pop();
-        }
-    }
-
-    return res.status(200).json({ status: 'success', data: product });
+    
+    return res.status(200).json({ status: 'success', data: product[0] });
 })
 
 

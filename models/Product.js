@@ -57,6 +57,9 @@ const fetchAllProducts = async () => {
                 category: "$_id",
                 items: 1
             }
+        },
+        {
+            $sort: { category: -1 }
         }
     ];
 
@@ -144,9 +147,10 @@ const fetchProductById = async (id) => {
         }
     ];
 
-
-    return await Product
+    const result = await Product
         .aggregate(agg);
+
+    return result;
 }
 
 module.exports = {

@@ -1,8 +1,8 @@
 const CustomError = require("../utils/CustomError");
 
-const castErrorHandler = (err) => {
+const castErrorHandler = (err, statusCode) => {
     const msg = `Invalid value for ${err.path}: ${err.value}`
-    return new CustomError(msg, 400);
+    return new CustomError(msg, statusCode);
 }
 
 const prodErrors = (res, error) => {
@@ -26,7 +26,7 @@ module.exports = (error, req, res, next) => {
     error.status = error.status || 'error';
 
     if (error.name = 'CastError') {
-        error = castErrorHandler(error)
+        error = castErrorHandler(error, error.statusCode)
     }
 
     prodErrors(res, error);
