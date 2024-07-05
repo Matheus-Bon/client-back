@@ -58,7 +58,7 @@ const schema = new Schema(
             type: String,
             enum: {
                 values: ['admin', 'clerk', 'user', 'deliveryMan'],
-                 message: "Esse cargo não existe"
+                message: "Esse cargo não existe"
             }
         },
         credentials: credentialsSchema,
@@ -83,16 +83,6 @@ const fetchUserById = async (id) => {
         })
 }
 
-const fetchUserByEmail = async (email) => {
-    return await User.findOne({ email });
-}
-
-const storeUser = async (newUser) => {
-    return await User.create(newUser);
-}
-
 module.exports = {
     fetchUserById,
-    fetchUserByEmail,
-    storeUser
 }

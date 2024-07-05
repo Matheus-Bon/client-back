@@ -6,5 +6,4 @@ const router = express.Router();
 
 router.get('/users/:id', show);
 
-
 module.exports = router;

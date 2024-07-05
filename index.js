@@ -7,7 +7,6 @@ const globalErrorHandler = require('./controllers/ErrorController');
 const ProductRoutes = require('./routes/ProductRoutes');
 const UserRoutes = require('./routes/UserRoutes');
 const OrderRoutes = require('./routes/OrderRoutes');
-const AuthRoutes = require('./routes/AuthRoutes');
 
 
 
@@ -32,8 +31,6 @@ app.use(express.json());
 app.use(ProductRoutes);
 app.use(UserRoutes);
 app.use(OrderRoutes);
-app.use(AuthRoutes);
-
 
 app.all('*', (req, res, next) => {
     res.status(500).json({
