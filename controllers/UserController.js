@@ -31,7 +31,8 @@ const show = asyncErrorHandler(async (req, res, next) => {
         _id: user.get('_id'),
         name: user.get('name'),
         orderId: user.get('current_order_id._id'),
-        orderStatus: user.get('current_order_id.status')
+        orderStatus: user.get('current_order_id.status'),
+        orderCode: user.get('current_order_id.order_code')
     };
 
     return res.status(200).json({ status: 'success', data: response });
