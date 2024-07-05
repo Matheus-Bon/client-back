@@ -7,6 +7,8 @@ const globalErrorHandler = require('./controllers/ErrorController');
 const ProductRoutes = require('./routes/ProductRoutes');
 const UserRoutes = require('./routes/UserRoutes');
 const OrderRoutes = require('./routes/OrderRoutes');
+const AuthRoutes = require('./routes/AuthRoutes');
+
 
 
 const whitelist = [''];
@@ -30,11 +32,13 @@ app.use(express.json());
 app.use(ProductRoutes);
 app.use(UserRoutes);
 app.use(OrderRoutes);
+app.use(AuthRoutes);
+
 
 app.all('*', (req, res, next) => {
-    res.status(404).json({
+    res.status(500).json({
         status: 'fail', 
-        message: "error"
+        message: "Essa rota não existe"
     })
 })
 

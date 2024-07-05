@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const { isAlpha, isEmail, isStrongPassword } = require('validator');
 
 const { Order } = require('./Order');
 
@@ -17,7 +18,7 @@ const handleRoutines = new Schema({
 }, { _id: false });
 
 const address = new Schema({
-    nickname: { type: String, unique: true },
+    nickname: { type: String },
     address: { type: String },
     location: {
         lat: { type: String },
@@ -26,18 +27,40 @@ const address = new Schema({
 });
 
 const credentialsSchema = new Schema({
-    email: { type: String },
-    password: { type: String }
+    email: {
+        type: String,
+        required: [true, 'Email é um campo obrigatório'],
+        unique: true,
+        validate: [isEmail, 'Email deve ser válido']
+    },
+    password: {
+        type: String,
+        required: [true, 'Senha é um campo obrigatório'],
+        validate: [isStrongPassword, 'Senha não cumpre os requisitos'],
+        minlength: [8, "Senha deve ter no mínimo 8 caracteres"],
+    }
 }, { _id: false });
 
 const schema = new Schema(
     {
-        name: { 
-            type: String 
+        name: {
+            type: String,
+            required: [true, 'Nome é um campo obrigatório'],
+            validate: [isAlpha, "Nome precisa ser válido"]
         },
-        phone: { type: String, maxLength: 13, index: { unique: true } },
+        phone: {
+            type: String,
+            maxlength: [13, "Contato deve ter 13 caracteres"],
+            unique: true
+        },
         current_order_id: { type: mongoose.Types.ObjectId, ref: 'orders' },
-        role: { type: String, enum: ['admin', 'clerk', 'user', 'deliveryMan'] },
+        role: {
+            type: String,
+            enum: {
+                values: ['admin', 'clerk', 'user', 'deliveryMan'],
+                 message: "Esse cargo não existe"
+            }
+        },
         credentials: credentialsSchema,
         adresses: { type: [address], default: [] },
         handle_routines: handleRoutines,
@@ -60,6 +83,16 @@ const fetchUserById = async (id) => {
         })
 }
 
+const fetchUserByEmail = async (email) => {
+    return await User.findOne({ email });
+}
+
+const storeUser = async (newUser) => {
+    return await User.create(newUser);
+}
+
 module.exports = {
-    fetchUserById
+    fetchUserById,
+    fetchUserByEmail,
+    storeUser
 }
